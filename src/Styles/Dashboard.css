@@ -1,0 +1,13 @@
+.highlightCard:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+  border-radius: 10px;
+  background-color: #00042265;
+}
+
+.highlightCard {
+  /* justify-self: center; */
+  /* align-self: center; */
+  cursor: pointer;
+  padding-top: 13%;
+}
