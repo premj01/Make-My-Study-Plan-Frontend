@@ -239,13 +239,12 @@ const MyStudyPlan = () => {
                           }}
                         />
                         <div>
-                          <Link
-                            href="#"
+                          <div
+                            
                             className="font-medium text-md hover:text-success text-success cursor-pointer"
-                            onClick={() => handleTopicClick(subTopic)}
                           >
                             {subTopic.subTopicname}
-                          </Link>
+                          </div>
                           <p className="text-sm text-default-500">
                             {subTopic.subTopicPointsWiseDescription}
                           </p>
