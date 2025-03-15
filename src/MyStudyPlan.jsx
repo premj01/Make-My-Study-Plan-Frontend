@@ -240,7 +240,7 @@ const MyStudyPlan = () => {
                         />
                         <div>
                           <Link
-                            href=""
+                            href="#"
                             className="font-medium text-md hover:text-success text-success cursor-pointer"
                             onClick={() => handleTopicClick(subTopic)}
                           >
