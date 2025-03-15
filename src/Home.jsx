@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import {
   FaCalendarAlt,
   FaUsers,
@@ -16,6 +17,7 @@ import { AuthenticationContext } from "./contextProvider/AuthContext";
 const Home = () => {
   const { isLogin } = useContext(AuthenticationContext);
   const [username, setUsername] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -118,26 +120,24 @@ const Home = () => {
               variants={fadeInUp}
               className="mt-8 flex flex-wrap items-center justify-center gap-4"
             >
-              <Link to="/signup">
-                <Button
-                  size="lg"
-                  color="secondary"
-                  variant="shadow"
-                  className="text-lg"
-                >
-                  Get Started <BsArrowRight className="inline-block ml-2" />
-                </Button>
-              </Link>
-              <Link to="/login">
-                <Button
-                  size="lg"
-                  color="primary"
-                  variant="bordered"
-                  className="text-lg"
-                >
-                  <FaRegUser className="mr-2" /> Sign In
-                </Button>
-              </Link>
+              <Button
+                size="lg"
+                color="secondary"
+                variant="shadow"
+                className="text-lg"
+                onPress={() => navigate("/signup")}
+              >
+                Get Started <BsArrowRight className="inline-block ml-2" />
+              </Button>
+              <Button
+                size="lg"
+                color="primary"
+                variant="bordered"
+                className="text-lg"
+                onPress={() => navigate("/login")}
+              >
+                <FaRegUser className="mr-2" /> Sign In
+              </Button>
             </motion.div>
           </motion.div>
         </div>
