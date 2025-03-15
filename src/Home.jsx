@@ -120,24 +120,48 @@ const Home = () => {
               variants={fadeInUp}
               className="mt-8 flex flex-wrap items-center justify-center gap-4"
             >
-              <Button
-                size="lg"
-                color="secondary"
-                variant="shadow"
-                className="text-lg"
-                onPress={() => navigate("/signup")}
-              >
-                Get Started <BsArrowRight className="inline-block ml-2" />
-              </Button>
-              <Button
-                size="lg"
-                color="primary"
-                variant="bordered"
-                className="text-lg"
-                onPress={() => navigate("/login")}
-              >
-                <FaRegUser className="mr-2" /> Sign In
-              </Button>
+              {!isLogin ? (
+                <Button
+                  size="lg"
+                  color="secondary"
+                  variant="shadow"
+                  className="text-lg"
+                  onPress={() => navigate("/signup")}
+                >
+                  Get Started <BsArrowRight className="inline-block ml-2" />
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  color="secondary"
+                  variant="shadow"
+                  className="text-lg"
+                  onPress={() => navigate("/dashboard")}
+                >
+                  Dashboard <BsArrowRight className="inline-block ml-2" />
+                </Button>
+              )}
+              {!isLogin ? (
+                <Button
+                  size="lg"
+                  color="primary"
+                  variant="bordered"
+                  className="text-lg"
+                  onPress={() => navigate("/login")}
+                >
+                  <FaRegUser className="mr-2" /> Sign In
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  color="primary"
+                  variant="bordered"
+                  className="text-lg"
+                  onPress={() => navigate("/leaderboard")}
+                >
+                  <FaRegUser className="mr-2" /> Leaderboard
+                </Button>
+              )}
             </motion.div>
           </motion.div>
         </div>
