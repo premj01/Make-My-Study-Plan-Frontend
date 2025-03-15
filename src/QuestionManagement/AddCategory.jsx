@@ -1,24 +1,66 @@
 import React, { useRef, useState } from "react";
-import { Input, Button, Calendar } from "@heroui/react";
-import { FaBook, FaCalendar, FaClock, FaCode } from "react-icons/fa";
+import {
+  Input,
+  Button,
+  Calendar,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+} from "@heroui/react";
+import {
+  FaBook,
+  FaCalendar,
+  FaClock,
+  FaCode,
+  FaChartLine,
+  FaRocket,
+  FaGraduationCap,
+} from "react-icons/fa";
 import { parseDate } from "@internationalized/date";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import hostname from "../utils/hostname";
 import { LoaderComponent } from "../LoaderComponent";
+import { motion } from "framer-motion";
+
+const DIFFICULTY_LEVELS = [
+  { key: "base", label: "Basic", description: "For beginners", icon: FaBook },
+  {
+    key: "intermediate",
+    label: "Intermediate",
+    description: "For experienced learners",
+    icon: FaGraduationCap,
+  },
+  {
+    key: "advance",
+    label: "Advanced",
+    description: "For experts",
+    icon: FaRocket,
+  },
+];
 
 const AddCategory = () => {
   const navigate = useNavigate();
   const langRef = useRef();
   const weeksRef = useRef();
   const timecanSpentDailyRef = useRef();
-  const [level, setLevel] = useState("base");
+  const [level, setLevel] = useState(new Set(["base"]));
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   const [error, setError] = useState("");
   const [isLoading, setisLoading] = useState(false);
   const [showStartCalendar, setShowStartCalendar] = useState(false);
+
+  const selectedLevel = React.useMemo(
+    () => Array.from(level)[0] || "base",
+    [level]
+  );
 
   const handleDateChange = (date) => {
     setStartDate(new Date(date).toISOString().split("T")[0]);
@@ -64,6 +106,7 @@ const AddCategory = () => {
     setError("");
 
     if (!validateForm()) {
+      setisLoading(false);
       return;
     }
 
@@ -80,7 +123,7 @@ const AddCategory = () => {
         email: email,
         language: langRef.current.value.trim(),
         duration: parseInt(weeksRef.current.value),
-        difficultyLevel: level,
+        difficultyLevel: selectedLevel,
         startDate: startDate,
         timecanSpentDaily: parseInt(timecanSpentDailyRef.current.value),
         SecCode: authToken,
@@ -142,131 +185,211 @@ const AddCategory = () => {
     }
   };
 
+  const renderDifficultyIcon = (selectedKey) => {
+    const selectedDifficulty = DIFFICULTY_LEVELS.find(
+      (d) => d.key === selectedKey
+    );
+    if (selectedDifficulty) {
+      const Icon = selectedDifficulty.icon;
+      return <Icon className="text-primary" />;
+    }
+    return null;
+  };
+
   return (
     <main className="dark text-foreground bg-background min-h-screen p-8">
       {isLoading && (
         <LoaderComponent message="Wait a moment, we are generating your study plan..." />
       )}
-      <div className="max-w-2xl mx-auto bg-card rounded-xl shadow-lg p-8 border border-border">
-        <h2 className="text-3xl font-bold mb-8 flex items-center gap-3">
-          <FaBook className="text-primary text-2xl" />
-          Create Study Plan
-        </h2>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Card className="max-w-2xl mx-auto bg-background/60 backdrop-blur-md shadow-2xl rounded-3xl border border-default-200">
+          <CardHeader className="flex flex-col gap-2 px-8 pt-8">
+            <h2 className="text-4xl font-bold flex items-center gap-3">
+              <FaBook className="text-primary" />
+              Create Study Plan
+            </h2>
+            <p className="text-default-500">
+              Design your personalized learning journey
+            </p>
+          </CardHeader>
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium mb-2">
-              <FaCode className="text-primary" />
-              Programming Language / Any Study Topic
-            </label>
-            <Input
-              ref={langRef}
-              placeholder="Topic Name"
-              className="w-full"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium mb-2">
-              <FaClock className="text-primary" />
-              Duration (Weeks)
-            </label>
-            <Input
-              ref={weeksRef}
-              type="number"
-              min="1"
-              max="52"
-              placeholder="Number of weeks (1-52)"
-              className="w-full"
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium mb-2">
-              <FaClock className="text-primary" />
-              Time Available Daily (Hours)
-            </label>
-            <Input
-              ref={timecanSpentDailyRef}
-              type="number"
-              min="1"
-              max="24"
-              placeholder="Hours per day (1-24)"
-              className="w-full"
-              required
-            />
-          </div>
-
-          <div className="space-y-4">
-            <label className="flex items-center gap-2 text-sm font-medium">
-              <FaCode className="text-primary" />
-              Difficulty Level
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {["base", "intermediate", "advance"].map((levelOption) => (
-                <button
-                  key={levelOption}
-                  type="button"
-                  onPress={() => setLevel(levelOption)}
-                  className={`p-3 rounded-lg border transition-all duration-200 capitalize text-sm whitespace-nowrap overflow-hidden text-ellipsis ${
-                    level === levelOption
-                      ? "bg-primary border-primary-focus text-primary-foreground"
-                      : "bg-card border-border hover:border-primary"
-                  }`}
-                >
-                  {levelOption}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium mb-2">
-              <FaCalendar className="text-primary" />
-              Start Date
-            </label>
-            <div className="relative">
-              <Button
-                onPress={() => setShowStartCalendar(!showStartCalendar)}
-                type="button"
-                className={`w-full justify-start text-left ${
-                  showStartCalendar ? "border-primary" : ""
-                }`}
+          <CardBody className="px-8 pb-8">
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="mb-6 p-4 bg-danger-50 dark:bg-danger-900/20 border border-danger-200 dark:border-danger-800 text-danger rounded-xl"
               >
-                {new Date(startDate).toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </Button>
-              {showStartCalendar && (
-                <div className="absolute z-10 mt-2 bg-popover border border-border shadow-xl rounded-lg">
-                  <Calendar
-                    aria-label="Start Date"
-                    value={parseDate(startDate)}
-                    onChange={handleDateChange}
+                {error}
+              </motion.div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 text-sm font-medium">
+                  <FaCode className="text-primary" />
+                  Programming Language / Study Topic
+                </label>
+                <Input
+                  ref={langRef}
+                  placeholder="e.g., Python, JavaScript, Mathematics"
+                  className="w-full"
+                  required
+                  size="lg"
+                  variant="bordered"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-medium">
+                    <FaClock className="text-primary" />
+                    Duration (Weeks)
+                  </label>
+                  <Input
+                    ref={weeksRef}
+                    type="number"
+                    min="1"
+                    max="52"
+                    placeholder="1-52 weeks"
+                    className="w-full"
+                    required
+                    size="lg"
+                    variant="bordered"
+                    startContent={
+                      <div className="pointer-events-none flex items-center">
+                        <span className="text-default-400 text-small">
+                          Weeks
+                        </span>
+                      </div>
+                    }
                   />
                 </div>
-              )}
-            </div>
-          </div>
 
-          <Button
-            type="submit"
-            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 py-3 rounded-lg font-medium shadow-lg transition-all duration-200"
-          >
-            Create Study Plan
-          </Button>
-        </form>
-      </div>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-medium">
+                    <FaClock className="text-primary" />
+                    Daily Study Hours
+                  </label>
+                  <Input
+                    ref={timecanSpentDailyRef}
+                    type="number"
+                    min="1"
+                    max="24"
+                    placeholder="1-24 hours"
+                    className="w-full"
+                    required
+                    size="lg"
+                    variant="bordered"
+                    startContent={
+                      <div className="pointer-events-none flex items-center">
+                        <span className="text-default-400 text-small">
+                          Hours
+                        </span>
+                      </div>
+                    }
+                  />
+                </div>
+              </div>
+
+              <Divider className="my-8" />
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-medium">
+                    <FaChartLine className="text-primary" />
+                    Difficulty Level
+                  </label>
+                  <Dropdown>
+                    <DropdownTrigger>
+                      <Button
+                        variant="bordered"
+                        className="w-full justify-start"
+                        size="lg"
+                        startContent={renderDifficultyIcon(selectedLevel)}
+                      >
+                        {DIFFICULTY_LEVELS.find((d) => d.key === selectedLevel)
+                          ?.label || "Select Level"}
+                      </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                      aria-label="Select difficulty level"
+                      variant="flat"
+                      selectionMode="single"
+                      selectedKeys={level}
+                      onSelectionChange={setLevel}
+                    >
+                      {DIFFICULTY_LEVELS.map((level) => (
+                        <DropdownItem
+                          key={level.key}
+                          startContent={renderDifficultyIcon(level.key)}
+                          description={level.description}
+                        >
+                          {level.label}
+                        </DropdownItem>
+                      ))}
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-medium">
+                    <FaCalendar className="text-primary" />
+                    Start Date
+                  </label>
+                  <div className="relative">
+                    <Button
+                      onPress={() => setShowStartCalendar(!showStartCalendar)}
+                      variant="bordered"
+                      size="lg"
+                      className="w-full justify-start"
+                      startContent={<FaCalendar className="text-primary" />}
+                    >
+                      {new Date(startDate).toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </Button>
+                    {showStartCalendar && (
+                      <Card className="absolute z-10 mt-2">
+                        <CardBody>
+                          <Calendar
+                            aria-label="Start Date"
+                            value={parseDate(startDate)}
+                            onChange={handleDateChange}
+                          />
+                        </CardBody>
+                      </Card>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <motion.div
+                className="pt-6"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+              >
+                <Button
+                  type="submit"
+                  className="w-full"
+                  size="lg"
+                  color="primary"
+                  variant="shadow"
+                  startContent={<FaRocket />}
+                >
+                  Create Study Plan
+                </Button>
+              </motion.div>
+            </form>
+          </CardBody>
+        </Card>
+      </motion.div>
     </main>
   );
 };

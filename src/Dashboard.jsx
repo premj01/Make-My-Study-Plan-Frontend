@@ -49,6 +49,10 @@ const Dashboard = () => {
             email: localStorage.getItem("email"),
             SecCode: localStorage.getItem("authToken"),
           });
+          console.log(
+            "API Response - Topic List:",
+            response.data.topicListContent
+          );
           setTopicList(response.data.topicListContent);
         } catch (error) {
           console.error("Error fetching dashboard content:", error);
@@ -75,14 +79,21 @@ const Dashboard = () => {
   };
 
   const getDifficultyColor = (difficulty) => {
-    switch (difficulty.toLowerCase()) {
+    const normalizedDifficulty = (difficulty || "").toLowerCase().trim();
+    switch (normalizedDifficulty) {
       case "base":
+      case "basic":
+      case "beginner":
         return "success";
       case "intermediate":
+      case "medium":
         return "warning";
       case "advance":
+      case "advanced":
+      case "expert":
         return "danger";
       default:
+        console.log("Unknown difficulty:", difficulty);
         return "primary";
     }
   };
