@@ -2,7 +2,7 @@
 
 A modern, responsive web application for creating personalized study plans. Built with React, Vite, and HeroUI components.
 
-## 🌟 Features
+## 🌟 Features 🐳
 
 - **Personalized Study Plans**: Create customized learning paths based on your preferences
 - **Smart Difficulty Selection**: Choose from Basic, Intermediate, and Advanced levels
