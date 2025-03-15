@@ -106,7 +106,7 @@ const MyStudyPlan = () => {
         _id: subTopic._id,
       })
     );
-    navigate("/explain-topic");
+   // navigate("/explain-topic");
   };
 
   const isTopicCompleted = (topic) => {
@@ -240,7 +240,7 @@ const MyStudyPlan = () => {
                         />
                         <div>
                           <Link
-                            href="#"
+                            href=""
                             className="font-medium text-md hover:text-success text-success cursor-pointer"
                             onClick={() => handleTopicClick(subTopic)}
                           >
