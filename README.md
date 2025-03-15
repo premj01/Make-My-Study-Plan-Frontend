@@ -137,7 +137,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Your Name - Initial work
 
-## 🙏 Acknowledgments
+## 🐳 Acknowledgments
 
 - HeroUI for the beautiful component library
 - React community for the amazing ecosystem
