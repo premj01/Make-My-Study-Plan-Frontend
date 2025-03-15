@@ -46,7 +46,7 @@ export default function NavigationBar() {
     menuItems = [
       { component: "Edit My Profile", path: "/profile", color: "#e2e2e2d9" },
       { component: "Dashboard", path: "/dashboard", color: "#e2e2e2d9" },
-      { component: "Activity", path: "/activity", color: "#e2e2e2d9" },
+      { component: "Leaderboard", path: "/leaderboard", color: "#e2e2e2d9" },
       { component: "Analytics", path: "/analytics", color: "#e2e2e2d9" },
       {
         component: "Help & Feedback",
