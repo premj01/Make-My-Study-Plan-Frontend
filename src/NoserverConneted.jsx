@@ -65,7 +65,7 @@ const NoserverConneted = () => {
               <div className="space-y-4">
                 <p className="text-foreground/80 text-white">
                   The service is currently unavailable. This is due to the
-                  backend server is down because of Server Maintenance.
+                  backend server is down because of Server Cost.
                 </p>
                 <div className="p-4 rounded-lg bg-default-10/50 backdrop-blur-sm border border-default-900 text-white">
                   <p className="text-default-500 text-white">
