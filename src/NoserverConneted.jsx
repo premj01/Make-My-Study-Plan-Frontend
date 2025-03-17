@@ -16,7 +16,7 @@ const NoserverConneted = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isServerDown, setIsServerDown] = useState(false);
 
-  window.onload = async () => {
+  useEffect(async () => {
     try {
       const response = await axios.get(hostname);
 
@@ -28,7 +28,7 @@ const NoserverConneted = () => {
       setIsServerDown(true);
       onOpen();
     }
-  };
+  }, [isOpen, isServerDown]);
 
   if (!isServerDown) return null;
 
