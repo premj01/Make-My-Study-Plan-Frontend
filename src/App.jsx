@@ -3,6 +3,7 @@ import { Avatar } from "@heroui/react";
 import NavigationBar from "./NavigationBar";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
+import NoserverConneted from "./NoserverConneted";
 
 function App() {
   const defaultContent =
@@ -11,9 +12,8 @@ function App() {
   return (
     <>
       <NavigationBar></NavigationBar>
-
+      <NoserverConneted />
       <Outlet></Outlet>
-
       <Footer></Footer>
     </>
   );
