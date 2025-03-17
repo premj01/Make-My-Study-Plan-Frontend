@@ -16,19 +16,23 @@ const NoserverConneted = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isServerDown, setIsServerDown] = useState(false);
 
-  useEffect(async () => {
-    try {
-      const response = await axios.get(hostname);
+  useEffect(() => {
+    const checkServerStatus = async () => {
+      try {
+        const response = await axios.get(hostname);
 
-      if (!response.data || !response.data.message) {
+        if (!response.data || !response.data.message) {
+          setIsServerDown(true);
+          onOpen();
+        }
+      } catch (error) {
         setIsServerDown(true);
         onOpen();
       }
-    } catch (error) {
-      setIsServerDown(true);
-      onOpen();
-    }
-  }, [isOpen, isServerDown]);
+    };
+
+    checkServerStatus();
+  }, [onOpen]);
 
   if (!isServerDown) return null;
 
