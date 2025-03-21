@@ -11,6 +11,7 @@ import {
   Progress,
   Divider,
   Link,
+  Tooltip,
 } from "@heroui/react";
 import { FaBook, FaCheckCircle, FaClock } from "react-icons/fa";
 import { addToast } from "@heroui/react";
@@ -98,15 +99,24 @@ const MyStudyPlan = () => {
   };
 
   const handleTopicClick = (subTopic) => {
-    localStorage.setItem(
-      "explainTopic",
-      JSON.stringify({
-        title: subTopic.subTopicname,
-        description: subTopic.subTopicPointsWiseDescription,
-        _id: subTopic._id,
-      })
-    );
-   // navigate("/explain-topic");
+    if (confirm("This will open youtube in a new tab, continue?")) {
+      localStorage.setItem(
+        "explainTopic",
+        JSON.stringify({
+          title: subTopic.subTopicname,
+          description: subTopic.subTopicPointsWiseDescription,
+          _id: subTopic._id,
+        })
+      );
+      const query = subTopic.subTopicname.replace(/\s+/g, "+");
+      window.open(
+        `https://www.youtube.com/results?search_query=${query}+in+${localStorage.getItem(
+          "topicName"
+        )}`,
+        "_blank"
+      );
+      // navigate("/explain-topic");
+    }
   };
 
   const isTopicCompleted = (topic) => {
@@ -239,12 +249,23 @@ const MyStudyPlan = () => {
                           }}
                         />
                         <div>
-                          <div
-                            
-                            className="font-medium text-md hover:text-success text-success cursor-pointer"
+                          <Tooltip
+                            key={subTopic.subTopicId}
+                            className="capitalize"
+                            color="danger"
+                            offset={-2}
+                            placement="top-start"
+                            content="Click to watch video on youtube"
+                            style={{ opacity: 0.5 }}
+                            closeDelay={2000}
                           >
-                            {subTopic.subTopicname}
-                          </div>
+                            <div
+                              className="font-medium text-md hover:text-success text-success cursor-pointer"
+                              onClick={() => handleTopicClick(subTopic)}
+                            >
+                              {subTopic.subTopicname}
+                            </div>
+                          </Tooltip>
                           <p className="text-sm text-default-500">
                             {subTopic.subTopicPointsWiseDescription}
                           </p>

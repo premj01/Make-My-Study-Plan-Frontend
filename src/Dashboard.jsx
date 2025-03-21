@@ -73,8 +73,9 @@ const Dashboard = () => {
     }
   }, []);
 
-  const handleTopicClick = (topicId) => {
+  const handleTopicClick = (topicId, topicName) => {
     localStorage.setItem("uuid", topicId);
+    localStorage.setItem("topicName", topicName);
     navigate("/my-study-plan");
   };
 
@@ -151,7 +152,7 @@ const Dashboard = () => {
           <Card
             key={topic.id}
             isPressable
-            onPress={() => handleTopicClick(topic.id)}
+            onPress={() => handleTopicClick(topic.id, topic.topicName)}
             className="hover:scale-105 transition-transform duration-200"
           >
             <CardBody className="p-6">
