@@ -83,7 +83,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Section */} 
       <div className="relative isolate px-4 sm:px-6 pt-8">
         <div className="mx-auto max-w-5xl py-12 sm:py-20 lg:py-28">
           <motion.div
