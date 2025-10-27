@@ -173,7 +173,7 @@ const SignupPage = () => {
                     aria-label="toggle password visibility"
                     className="focus:outline-none"
                     type="button"
-                    onPress={toggleVisibility}
+                    onClick={toggleVisibility}
                   >
                     {isVisible ? (
                       <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />

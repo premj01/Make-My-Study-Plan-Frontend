@@ -21,6 +21,7 @@ import { StudyPlanContextProvider } from "./contextProvider/StudyPlanContext.jsx
 import MyStudyPlan from "./MyStudyPlan.jsx";
 import Profile from "./Profile.jsx";
 import LeaderBoard from "./LeaderBoard.jsx";
+import { AskQuiz } from "./AskQuiz.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
       { path: "my-study-plan", element: <MyStudyPlan /> },
       { path: "profile", element: <Profile /> },
       { path: "leaderboard", element: <LeaderBoard /> },
+      { path: "ask_quiz", element: <AskQuiz /> },
       { path: "*", element: <ErrorPage /> },
     ],
   },
