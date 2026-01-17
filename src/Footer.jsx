@@ -84,7 +84,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <p className="mt-10 text-center text-xs leading-5 text-foreground/60">
-          &copy; {new Date().getFullYear()} Prem Jadhav, Inc. All rights
+          &copy; {new Date().getFullYear()} Prem Jadhav, All rights
           reserved.
         </p>
       </div>
